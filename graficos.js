@@ -99,6 +99,45 @@ function limpaCanvas(ctx) {
   ctx.clearRect(0, 0, canvasVertices.width, canvasVertices.height);
 }
 
+
+canvasArestas.onmousedown = function(e) {
+    for (vertice of vertices) {
+        var distancia = Math.sqrt((vertice.x - e.pageX) ** 2 + (vertice.y - e.pageY) ** 2);
+        if (distancia <= vertice.raio) {
+            arrastando = vertice;
+            break;
+        }
+    }
+}
+
+canvasArestas.onmousemove = function(e) {
+    if (arrastando !== null) {
+        arrastando.x = e.pageX;
+        arrastando.y = e.pageY;
+        if (arrastando.x + arrastando.raio > canvasArestas.width) {
+            arrastando.x = canvasArestas.width - arrastando.raio;
+        }
+        if (arrastando.y + arrastando.raio > canvasArestas.height) {
+            arrastando.y = canvasArestas.height - arrastando.raio;
+        }
+        if (arrastando.x - arrastando.raio < 0) {
+            arrastando.x = arrastando.raio;
+        }
+        if (arrastando.y - arrastando.raio < 0) {
+            arrastando.y = arrastando.raio;
+        }
+    }
+}
+
+canvasArestas.onmouseup = function(e) {
+    arrastando = null;
+    limpaCanvas(ctxVertices);
+    desenhaVertices(vertices);
+    limpaCanvas(ctxArestas);
+    desenhaArestas(arestas);
+}
+
+var arrastando = null;
 const verticeA = {nome: "A", x: 200, y: 100, raio: 50};
 const verticeB = {nome: "B", x: 60, y: 200, raio: 50};
 const verticeC = {nome: "C", x: 250, y: 300, raio: 50};
